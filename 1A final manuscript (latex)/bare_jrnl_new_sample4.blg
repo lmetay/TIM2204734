@@ -1,0 +1,90 @@
+This is BibTeX, Version 0.99dThe top-level auxiliary file: bare_jrnl_new_sample4.aux
+The style file: IEEEtran.bst
+Database file #1: IEEEabrv.bib
+Database file #2: my_bib.bib
+I was expecting a `,' or a `}'---line 25 of file my_bib.bib
+ : 
+ : %URL = {https://www.mdpi.com/2072-4292/12/3/478},
+(Error may have been on previous line)
+I'm skipping whatever remains of this entry
+I was expecting a `,' or a `}'---line 78 of file my_bib.bib
+ : 
+ : %URL = {https://www.mdpi.com/2072-4292/14/7/1552},
+(Error may have been on previous line)
+I'm skipping whatever remains of this entry
+I was expecting a `,' or a `}'---line 91 of file my_bib.bib
+ : 
+ : DOI = {10.3390/rs12101688},
+(Error may have been on previous line)
+I'm skipping whatever remains of this entry
+You're missing a field name---line 104 of file my_bib.bib
+ : 
+ : %url = {https://www.sciencedirect.com/science/article/pii/S0925231221009838},
+(Error may have been on previous line)
+I'm skipping whatever remains of this entry
+I was expecting a `,' or a `}'---line 118 of file my_bib.bib
+ : 
+ : %URL = {https://www.mdpi.com/2072-4292/12/10/1662},
+(Error may have been on previous line)
+I'm skipping whatever remains of this entry
+I was expecting a `,' or a `}'---line 154 of file my_bib.bib
+ : 
+ : %URL = {https://www.mdpi.com/2072-4292/13/14/2646},
+(Error may have been on previous line)
+I'm skipping whatever remains of this entry
+I was expecting a `,' or a `}'---line 211 of file my_bib.bib
+ : 
+ : %url = {https://www.sciencedirect.com/science/article/pii/S0924271622001344},
+(Error may have been on previous line)
+I'm skipping whatever remains of this entry
+I was expecting a `,' or a `}'---line 224 of file my_bib.bib
+ : 
+ : %url = {https://www.sciencedirect.com/science/article/pii/S0924271622000636},
+(Error may have been on previous line)
+I'm skipping whatever remains of this entry
+I was expecting a `,' or a `}'---line 236 of file my_bib.bib
+ : 
+ : %url = {https://www.sciencedirect.com/science/article/pii/S0924271620300149},
+(Error may have been on previous line)
+I'm skipping whatever remains of this entry
+I was expecting a `,' or a `}'---line 248 of file my_bib.bib
+ : 
+ : %url = {https://www.sciencedirect.com/science/article/pii/S0303243421002981},
+(Error may have been on previous line)
+I'm skipping whatever remains of this entry
+I was expecting a `,' or a `}'---line 327 of file my_bib.bib
+ : 
+ : %url = {https://www.sciencedirect.com/science/article/pii/S0924271620301532},
+(Error may have been on previous line)
+I'm skipping whatever remains of this entry
+I was expecting a `,' or a `}'---line 394 of file my_bib.bib
+ : 
+ : %URL = {https://www.mdpi.com/2072-4292/11/11/1382},
+(Error may have been on previous line)
+I'm skipping whatever remains of this entry
+You're missing a field name---line 430 of file my_bib.bib
+ : 
+ : %url = {https://www.sciencedirect.com/science/article/pii/S0303243421001720},
+(Error may have been on previous line)
+I'm skipping whatever remains of this entry
+You're missing a field name---line 443 of file my_bib.bib
+ : 
+ : %url = {https://www.sciencedirect.com/science/article/pii/S092427162100068X},
+(Error may have been on previous line)
+I'm skipping whatever remains of this entry
+You're missing a field name---line 495 of file my_bib.bib
+ :   
+ :   %publisher = {OpenReview.net},
+(Error may have been on previous line)
+I'm skipping whatever remains of this entry
+I was expecting a `,' or a `}'---line 588 of file my_bib.bib
+ : 
+ : %URL = {https://www.mdpi.com/2072-4292/12/17/2683},
+(Error may have been on previous line)
+I'm skipping whatever remains of this entry
+-- IEEEtran.bst version 1.13 (2008/09/30) by Michael Shell.
+-- http://www.michaelshell.org/tex/ieeetran/bibtex/
+-- See the "IEEEtran_bst_HOWTO.pdf" manual for usage information.
+
+Done.
+(There were 16 error messages)

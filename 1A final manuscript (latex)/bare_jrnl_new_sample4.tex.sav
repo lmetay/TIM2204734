@@ -1,0 +1,614 @@
+\documentclass[lettersize,journal]{IEEEtran}
+\usepackage{amsmath,amsfonts}
+\usepackage{mathptmx} % 公式为新罗马字体
+\usepackage{algorithmicx}
+\usepackage{algorithm}
+\usepackage{array}
+\usepackage[caption=false,font=normalsize,labelfont=sf,textfont=sf]{subfig}
+\usepackage{textcomp}
+%\usepackage{stfloats}
+%\usepackage{subfigure}
+\usepackage{subfloat}
+\usepackage{url}
+\usepackage{verbatim}
+\usepackage{pifont}
+\usepackage{graphicx}
+\usepackage{cite}
+\usepackage{color}
+\usepackage{multirow}
+\let\labelindent\relax
+\usepackage{enumitem}
+%\usepackage{amsmath,amssymb}
+\usepackage{bigstrut}
+\usepackage{indentfirst}
+\usepackage{booktabs}
+\usepackage{algpseudocode}
+\usepackage[switch]{lineno}
+\usepackage[top=2cm, bottom=2cm, left=2cm, right=2cm]{geometry}
+%\usepackage{bibspacing}
+
+
+\floatname{algorithm}{Algorithm}
+\renewcommand{\algorithmicrequire}{\textbf{Input:}}
+\renewcommand{\algorithmicensure}{\textbf{Output:}}
+\hyphenation{op-tical net-works semi-conduc-tor IEEE-Xplore}
+% updated with editorial comments 8/9/2021
+
+\begin{document}
+\linenumbers
+\title{RaSRNet: An end-to-end Relation-aware Semantic Reasoning Network for Change Detection in Optical Remote Sensing Images}
+%\vspace{-0.4cm}
+\author{Yi Liang, Chengkun Zhang, Min Han,~\IEEEmembership{Senior Member,~IEEE}
+        % <-this % stops a space
+
+%\thanks{This work is supported by National Key Research and Development Program of China under
+%Grant 2016YFC0400903, and the Fundamental Research Funds for the Central Universities under Grant
+%DUT20LAB114.(Corresponding author: Min Han.)}
+\thanks{Yi Liang is with Faculty of Electronic Information and Electrical Engineering, Dalian University of Technology, Dalian 116000, China (e-mail:liangyi@mail.dlut.edu.cn).}
+\thanks{Chengkun Zhang is with Department of Computer Technology and Application, Qinghai University, Xining 810000, China (e-mail:zhangchengkundon@163.com).}
+\thanks{Min Han is with the Key Laboratory of Intelligent Control and Optimization for Industrial Equipment of Ministry of Education, Dalian University of Technology, Liaoning 116024, China (e-mail:minhan@dlut.edu.cn).}
+}
+
+% The paper headers
+\markboth{Journal of \LaTeX\ Class Files,~Vol.~, No.~, ~2021}%
+{Shell \MakeLowercase{\textit{et al.}}: A Sample Article Using IEEEtran.cls for IEEE Journals}
+
+%\IEEEpubid{,}
+% Remember, if you use this you must call \IEEEpubidadjcol in the second
+% column for its text to clear the IEEEpubid mark.
+
+\maketitle
+\begin{abstract}
+     Optical Remote sensing images (RSIs) are used in surface observation, and one of the most interesting research topics is change detection (CD). The internal problem of RSIs, including multi-scales changed objects and cluttered background, still deserve attention. Existing methods make great efforts to solve this problem but inevitably miss detection, which affects the model performance. To address this dilemma, this article proposes a Relation-aware Semantic Reasoning Network (RaSRNet) in an end-to-end manner to pop-out change objects in RSIs, where the key point is to perceive contextual semantic information. The relation-aware module in RaSRNet combats the lack of contextual information caused by the limited receptive field of the general convolutional layer, which facilitates all-around changed object detection. The multi-level semantic reasoning encoder-decoder backbone in RaSRNet extracts and reconstructs pixel semantic information, alleviates the interference of background noise and improves the integrity recognition of changed objects. In addition, the decoder backend undertakes two semantic segmentation branches, and introduces a semantic reasoning loss between the two branches to infer pixel semantic categories, which provides more accurate semantic features for the CD. Extensive experiments are conducted on the three public RSIs CD datasets, and the results demonstrate that the proposed RaSRNet can accurately locate changed objects, which consistently outperforms the state-of-the-art CD competitors.
+\end{abstract}
+%\setlength{\parskip}{0.05cm plus1mm minus1mm}
+\begin{IEEEkeywords}
+Relation-aware, Semantic Reasoning, Optical remote sensing images, Change detection.
+\end{IEEEkeywords}
+
+%\vspace{-0.4cm}
+\section{Introduction}
+%\vspace{-0.1cm}
+\IEEEPARstart{C}{hange} detection (CD) aims to identify the change areas in remote sensing images (RSIs) that cover the same surface. CD can more effectively understand surface changes in the real world, so it has been widely applied in many tasks, such as urban planning \cite{1_Liu_A_Contrario_TGRS}, land use detection \cite{2_Hao_Bidirectional_RS}, and vegetation change detection \cite{49_Sierra_Graph_RS}, etc.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=3in]{fig1.eps}
+%\vspace{-0.2cm}
+\caption{Visualization of some examples: (a) Time $t_{1}$ RSIs. (b) Time $t_{2}$ RSIs. (c) Ground Truth. (d) FC-Siam-Diff. (e) DSAMNet. (f) proposed RaSRNet.}
+\label{0920}
+\end{figure}
+
+
+
+In recent years, many works have made great efforts to treat change detection as a technical problem of computer vision \cite{6_Jiang_A_Survey_RS,7_Shi_change_RS}. According to the differences in computer vision tasks, CD methods can be roughly summarized as 1) metric learning-based CD method (MLCD), 2) classification-based CD method (CCD) and 3) segmentation-based CD method (SCD). The MLCD aims to mine the semantic similarity between paired RSIs and generates distance map. Euclidean distance \cite{48_Chen_Mechanical_TIM},
+%\cite{8_Wang_Fully_Neuro,9_Chen_A_Spatial_RS,10_Shi_A_Deeply_TGRS, 48_Chen_Mechanical_TIM}
+Mahalanobis distance \cite{11_Tang_An_unsupervised_TGRS}, and cosine similarity \cite{12_Xu_Change_RS} are often used to measure the similarity. However, a margin split is required to generate change map from distance map. The selection of the margin is closely related to the scene of RSIs, so MLCD is not flexible enough. The CCD aims to fit one or more classifiers to decide whether pixel changes or not. According to the time-ordered of performing classification, CCDs are divided into direct classification (d-CCD) and post-classification (post-CCD).
+%these methods are divided into pre-classification \cite{13_Zagoruyko_Learning_CVPR} and post-classification \cite{14_Fan_A_Novel_JSTAR,15_Rahman_Learning_CVPR}.
+The d-CCD is difficult to solve the semantic confusion between the changed samples since it is not limited by semantic information. The interference information tends to generate more false detections (e.g., FC-Siam-Diff is difficult to judge shadow disturbance when performing building CD in the 2nd row in Fig.\ref{0920}). The post-CCD requires the input RSIs are strictly registered, and they inevitably accumulate errors due to multi-classifier branches. The SCD is an advanced classification method, it allows to represent more complex semantic information and provides a more ingenious technical framework. Many recent studies focus on the semantic segmentation theory, which provides a new idea for RSIs CD \cite{16_Ding_Bi_TGRS,17_Shen_Semantic_ISPRS,18_Chen_FCCDN_ISPRS}.
+
+
+
+
+The implementation of the SCD is to 1) transfer and replicate the semantic segmentation networks applied to single natural scene images (NSIs); 2) build semantic reasoning siamese branches which each outputs the semantic reasoning map corresponding to the input image; 3) generate change map by comparing semantic reasoning map. Although NSIs match optical RSIs from RGB in color patterns. Transferring the state-of-the-art semantic segmentation network from NSIs to RSIs CD still poses significant uncertainties due to the different imaging environments and imaging heights of RSI. To be precise, influenced by the high-altitude shooting and large-area coverage, the gaps of ground objects in the scale and quantity make it harder to accurately reason out semantic information (e.g., dense small-scale building change objects in the 1st row in Fig.\ref{0920} and sparse large-scale road augments change objects in the 3rd row).
+
+
+%However, the state-of-the-art semantic segmentation network in NSIs is transferred to RSIs-related tasks, it is still difficult to obtain satisfactory results due to the difference in imaging environment and imaging height. To be precise, optical RSIs are captured by satellites or unmanned aerial vehicles from aero-view. This process is susceptible to environmental factors, resulting in complex scenarios, which bring great uncertainty to the CD results. Meanwhile, affected by the high-altitude shooting and large-area coverage, the gaps of ground objects in the scale and quantity make it harder to accurately reason out semantic information (e.g., dense small-scale building change objects in the first row in Fig.\ref{0920} and sparse large-scale road augments change objects in the third row).
+
+
+Existing articles use multi-scale convolutional structures to expand the receptive field (RF), and develop context information to explicitly alleviate the above problems \cite{51_Lu_Attention_TIM}. Such as multi-scale feature fusion (MSFF) \cite{17_Shen_Semantic_ISPRS}, pyramid pooling \cite{19_Diakogiannis_ResUNet_ISPRS}, atrous spatial pyramid pooling (ASPP) \cite{20_DING_DSANet_JSTAR}, feature pyramid \cite{21_Dong_Multiscale_LGRS}, etc. However, the RF is still limited and the pooling operation is prone to cause local information loss. Graph-based relational awareness is a promising strategy, and it has been proven effective in capturing long-range contextual relations and leveraging global semantic information \cite{22_Cong_RRNet_TGRS,23_Chen_Graph_CVPR,24_Su_Semantic_LGRS}. Therefore, in this paper, we propose to embed spatial and channel relation-aware modules into the encoder-decoder backbone. Its role is to model the semantic relationship of different objects on RSI and to model the distribution between feature channels.
+
+
+On the other hand, deep features facilitate the learning of pixel semantic categories, and the shallow features with detailed boundary information help to achieve detail recovery. Many articles are based on the encoder-decoder networks (ED) that effectively utilize the deep and shallow features to enhance the feature discriminative power and noise immunity \cite{26_Daudt_Fully_ICIP,52_Huo_Real_TIM,29_Li_TransUNetCD_TGRS}. Depending on the network branch, the ED can be divided into the single-stream ED (SSED) and double-stream ED (DSED) \cite{7_Shi_change_RS}. The SSED directly learns the difference between RSIs (as shown in Fig.\ref{1950}(a)). The DSED learns the differences between RSIs after encoding. Further, DSED is refined into ``dual-encoder+single-decoder (DSED-e)" and ``dual encoder-decoder (DSED-d)" structures (as shown in Fig.\ref{1950}(b),(c)). In SSED and DSED-e, the direct difference of rough shallow features will increase the noise interference. Therefore, we design a multi-level semantic reasoning ED following DSED-d to learn differential features at the decoder backend. Subsequently, we concatenate two semantic segmentation heads and a change detection head at the siamese decoder backend. A hybrid supervised training mechanism is proposed to guide the network to generate more representative and discriminative features.
+
+%\vspace{-0.3cm}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=3.3in]{fig2.eps}
+\vspace{-0.3cm}
+\caption{The structures of ED. (a) SSED. (b) DSED-e. (c) DSED-d.}
+\label{1950}
+\end{figure}
+
+%\setlength{\belowcaptionskip}{-0.5cm}
+%\vspace{-0.3cm}
+In this paper, we devote to fully exploiting an end-to-end semantic reasoning network with relation-aware for CD in optical RSIs. The main contributions are given as follows.
+
+\begin{enumerate}[leftmargin=1.5em]
+  \item An end-to-end relation-aware semantic seasoning network (RaSRNet) is proposed to achieve CD in optical RSIs, equipped with a multi-level semantic reasoning encoder-decoder and relation-aware (Ra) modules that is separable from the backbone.
+  \item We establish a semantic reasoning encoder-decoder backbone (SRNet), in which a batch of feature fusion blocks in the decoder can integrate multi-scale information. The back-end of the decoder connects the semantic segmentation head and the change detection head, which can explicitly reason semantic properties and provide the necessary feature constraints.
+  \item We propose the Ra module to learn global contextual features in spatial and channel dimensions through graph embedding, while comprehensively capturing ground objects. This is the first attempt to introduce relational awareness in the CD framework of optical RSIs.
+  \item We develop a hybrid loss function to constrain the training of RaSRNet. Specifically, (1) the deeply supervised strategy acts on the shallow features extracted by the encoder to constrain the boundary representation of changed objects; (2) a semantic reasoning loss acts on the semantic segmentation maps to constrain the semantic properties of unchanged area.
+\end{enumerate}
+
+%\vspace{-0.4cm}
+\section{Related Works}
+%\vspace{-0.1cm}
+\subsection{Semantic Segmentation Transfer in CD Models}
+%\vspace{-0.1cm}
+%The semantic information of RSIs is a computer language that expresses the concepts of pixels at the visual layer (low-level features), object layer (middle layer features) and conceptual layer (high-level features), which simulate human visual perception of the environment.
+The CD model based on semantic segmentation transfer assigns specific changed/unchanged semantic labels to pixels by semantic information. Currently, the most commonly used segmentation framework on CD is the ED structure. This structure merges deep features into shallow features. Since multi-level features have different resolutions, fusing them can capture multi-scale semantic information and provide high-resolution output. Fully Convolutional Network (FCN) is a network with an ED structure \cite{31_Sun_Fine_LGRS}. The decoder of FCN uses deconvolution layers for upsampling, which can restore the feature map to the size of the input image. U-Net is an efficient and symmetric ED network, whose skip connections allow encoded features to be retained and reused \cite{32_RONNEBERGER_Deep_CVPR}. U-Net++ adopts dense connections to replace skip connections in U-Net to enrich the fusion of multi-level features \cite{33_Peng_End_RS,34_Zhang_A_Satellite_LGRS}. In \cite{36_Peng_SCDNET_JAG,37_Zheng_CLNet_ISPRS,38_Li_A_Combined_LGRS}, multi-scale convolution is used to capture richer comprehensive semantic content.
+
+
+%In addition, DeepLab V3 introduce ASPP to enhance the multi-scale context representation \cite{35_Chen_Encoder_ECCV}.
+%\vspace{-0.4cm}
+\subsection{Global relation awareness in CD Models}
+%\vspace{-0.1cm}
+Deep learning-based CD models are inseparable from the basic structure of ``convolutional layers", which are stacked to learn more non-local information. The large number of the stacked convolutional layers makes it more difficult to learn a suitable model. The latest efforts have focused on the development of attention mechanisms in spatial dimension \cite{9_Chen_A_Spatial_RS,10_Shi_A_Deeply_TGRS,39_Gong_A_Spectral_TGRS} and channel dimension \cite{17_Shen_Semantic_ISPRS,36_Peng_SCDNET_JAG,40_Yang_A_Deep_TGRS} for learning non-local details. However, spatial attention will gain an attention map with twice of the feature size. Channel attention obtains a high-dimensional weight vector over deep features. This means the attention mechanism consumes a huge computational cost. The graph structure is an effective way to simplify the attention mechanism. Using graph convolutional topology to learn the relationship between graph nodes, and then mapping the graph nodes on multiple regions of features to form region-region relationship learning. Currently, graph-based relation awareness is applied in object detection \cite{22_Cong_RRNet_TGRS}, semantic segmentation \cite{24_Su_Semantic_LGRS}, and image classification \cite{50_Ding_Global_TIM}. It is still a frontier of exploration. Therefore, inducing directed graph to efficiently perceive inter-domain relationships between spatial objects is critical for enhancing the discriminative feature.
+
+%\vspace{-0.4cm}
+\subsection{Graph Convolution}
+%\vspace{-0.1cm}
+Thomas \textit{et al}. proposed Graph Convolutional Networks (GCN) in 2017\cite{42_Thomas_Graphconv_ICLR}. For a graph representation $G=(V,E)$, where $V$ is the set of nodes and $E$ is the set of edges linking the nodes. A symmetric normalized Laplacian matrix $L=I-D^{-1/2}AD^{-1/2}$ represents the relationship between nodes. $I$ is the identity matrix, $D$ is the degree matrix (diagonal matrix), and $A$ is adjacency matrix with 0 and 1. $A_{mn}$ is 1 when node $m$ and node $n$ are connected by an edge. $L$ has $N$ (the number of nodes) eigenvectors (denoted as $U$) that can be decomposed as $U \Lambda U^{\rm T}$. Extending the Fourier transform to the graph structure, there is $\hat{x}= U^{\rm T}x$, \textcolor{blue}{where} $x$ is the input signal, the spectral domain signal $\hat{x}$ is obtained through the orthogonal bases $U$.
+
+By analogizing the above convolution theorem to graph topology, the graph convolution can be defined by spectral filter $\Lambda$ and spectral domain signal $\textbf{s}$, i.e., $g(\Lambda)*\textbf{s} = Ug(\Lambda)U^{\rm T}\textbf{s}$. However, $U$ is very computationally intensive. In order to simplify the graph convolution operation, later studies proposed to use $K$-th order Chebyshev polynomials $T_{k}$ to approximate $Ug(\Lambda)U$ \cite{43_Hammond_Wavelets_ACHA}. Therefore, the convolution of the graph signal can be expressed as follows:
+
+\vspace{-0.1cm}
+\begin{equation}
+ g(\Lambda)*\textbf{s} \approx  \sum\nolimits_{k=0}^K {\theta_{k}T_{k}(L)\textbf{s}}
+\end{equation}
+\textcolor{blue}{where} $\theta_{k}$ is Chebyshev coefficients vector. Then, restricting $K$ to 2 and limiting the largest eigenvalue of $L$ to 2. Formula (1) is can be further simplified as follows: %(i.e., $\lambda_{\rm max}$)
+
+\vspace{-0.2cm}
+\begin{equation}
+ g(\Lambda)*\textbf{s} \approx  \theta (I+D^{-1/2}AD^{-1/2})\textbf{s}
+\end{equation}
+
+\vspace{-0.2cm}
+\begin{equation}
+\theta (I+D^{-1/2}AD^{-1/2})\textbf{s} = \theta (\widetilde{D}^{-1/2}\widetilde{A}\widetilde{D}^{-1/2})\textbf{s}
+\end{equation}
+\textcolor{blue}{where} $\theta$ is the Chebyshev coefficient. $I+D^{-1/2}AD^{-1/2}$ is renormalized to $\widetilde{D}^{-1/2}\widetilde{A}\widetilde{D}^{-1/2}$. $\widetilde{A}=I+A$, $\widetilde{D}_{ii}= \sum_{i=1}^{}\widetilde{A}_{ij}$.
+
+In summary, for the multi-channel input signal $\textbf{X} \in \mathbb{R}^{HW \times C}$ (each node has a feature vector with C-dimension), its graph convolution is shown in formula (4):
+\vspace{-0.1cm}
+\begin{equation}
+ Z = \sigma(\widetilde{D}^{-1/2}\widetilde{A}\widetilde{D}^{-1/2} \textbf{X} \Theta)
+\end{equation}
+\textcolor{blue}{where} $Z$ is updated node feature, $\Theta$ is a weight matrix, and $\sigma$ is activation function.
+
+%\vspace{-0.4cm}
+\section{Proposed Model}
+%\vspace{-0.1cm}
+\subsection{Architecture Overview}
+%\vspace{-0.1cm}
+
+
+%Architecture of the proposed RaSRNet. The blue and yellow solid lines represent the processing flow of the input RSIs ${\textbf{X}}^{(t_{1})}$ and ${\textbf{X}}^{(t_{2})}$. The dotted box constitutes the SRNet. Encoder generates multi-scale features, including low-level features from the first two stages ($ {\textbf{F}}_{e,1} $ and $ {\textbf{F}}_{e,2} $) and high-level features from the last two stages ($ {\textbf{F}}_{e,3} $ and $ {\textbf{F}}_{e,4} $).  Ra act on $ {\textbf{F}}_{e,1} $, $ {\textbf{F}}_{e,2} $ and $ {\textbf{F}}_{e,3} $ respectively to obtain global semantic features (i.e., $ {\textbf{F}}_{ra,1} $, $ {\textbf{F}}_{ra,2} $ and $ {\textbf{F}}_{ra,3} $ ). Decoder performs multi-level feature fusion ($ {\textbf{F}}_{ra,1} $, $ {\textbf{F}}_{ra,2} $, $ {\textbf{F}}_{ra,3} $ and $ {\textbf{F}}_{e,4} $). Output features (${\textbf{F}}_{d,1} $) are fed separately into seg heads and CD head, and their internal calculation process is shown in the right portion. DS act on shallow encoding feature of the same scale of two RSIs, which are used to constrain our RaSRNet to generate valuable low-level semantic information.
+
+The architecture of the proposed RaSRNet is shown in Fig.\ref{1444}, which contains 1) a multi-level semantic reasoning encoder-decoder backbone network (SRNet), 2) three relation-aware modules, 3) two deeply-supervised modules (DSs), 4) two semantic segmentation heads (Seg Heads), and 5) a change detection head (CD Head). Firstly, the input RSI (${\textbf{X}}^{(t_{1})}$ and ${\textbf{X}}^{(t_{2})}$) are passed into the encoder (ResNet18 without fully connected layer) to extract the multi-scale encoded features $\{ {\textbf{F}}_{e,k} \} _{k=1}^4$. Then, $ {\textbf{F}}_{e,1} $, $ {\textbf{F}}_{e,2} $ and $ {\textbf{F}}_{e,3} $ are sent to the three Ra modules. Concretely, Ra tries to model the semantic relation between objects in RSI and outputs the enhanced features ($ {\textbf{F}}_{ra,1} $, $ {\textbf{F}}_{ra,2} $ and $ {\textbf{F}}_{ra,3}$). The cascaded FFBs in decoder are used to fuse multi-scale features and generate the last decoded feature $ {\textbf{F}}_{d,1} $. Finally, seg heads act on the $ {\textbf{F}}_{d,1} $ to explicitly display segmentation maps, and a CD head generates a predicted CD map. \textcolor{blue}{In addition, we extract more useful information by constraining shallow encoded features ($ {\textbf{F}}_{e,1} $ and $ {\textbf{F}}_{e,2} $) with deeply supervised (DS) modules}. DS is formed by two stacked transposed convolution layers (transconv) with 3$\times$3 kernel, where the first transconv is followed by batch normalization and Relu activation. During training, the CD map is used to calculate the change loss with labels. The paired segmentation maps constrain each other to enhance the detail of unchanged areas.
+
+\begin{figure*}[htbp]
+\centering
+\includegraphics[width=6in]{fig3.eps}
+%\vspace{-0.3cm}
+\caption{Architecture of the proposed RaSRNet. The blue and yellow solid lines represent the processing flow of two RSIs. The dotted box constitutes the baseline model (i.e., SRNet).}
+\label{1444}
+\end{figure*}
+
+
+%\vspace{-0.4cm}
+\subsection{Semantic Reasoning Encoder-Decoder Backbone}
+%\vspace{-0.1cm}
+
+Our backbone is based on an encoder-decoder structure and is named semantic reasoning network (SRNet). The encoder of SRNet is based on the ResNet18, and its decoder consists of a series of FFBs (as shown in the right part of Fig.\ref{1444}). So far, the decoder output feature ${\textbf{F}}_{d,1}$ covers both coarse-grained low-level semantic information and fine-grained high-level semantic information. This is important for detail recovery of objects of different scales. Finally, the semantic segmentation map of paired images and CD map are output through three prediction branches (two seg heads and a CD head).
+
+% \cite{44_He_Deep_CVPR}
+
+% \begin{figure}[htbp]
+% \centering
+% \includegraphics[width=3in]{fig4.eps}
+% \caption{The structure of feature fusion block.}
+% \label{1430}
+% \end{figure}
+
+%\vspace{-0.4cm}
+\subsection{Relation-aware module }
+%\vspace{-0.1cm}
+
+
+In order to obtain a more comprehensive internal modeling relationship, we perform graph-based relation-aware in both spatial and channel dimensions. Ra module is an improved work based on the global reasoning unit proposed by Chen \textit{et al} \cite{23_Chen_Graph_CVPR}. Specifically, convolutional features $\textbf{F}_{e,k} \in \mathbb{R}^{C \times H \times W}$ ($ k=1,2,3$) are transported to parallel spatial relation-aware (SRa) and channel relation-aware (CRa) modules to generate enhanced features $\textbf{F}_{ra,k} \in \mathbb{R}^{C \times H \times W}$. The relation-aware process consists of three important steps, i.e., 1) domain projection and graph representation, 2) graph node relation-aware, and 3) graph re-projection. In CRa, we permute the dimension of $\textbf{F}_{e,k}$ and decompose it in the channel dimension (i.e., $\textbf{F}_{e,k}^{c} \in \mathbb{R}^{HW \times (C/M) \times M}$, where $(C/M)$ and $M$ are the reshaped height and width), and then do the same processing as SRa. Finally, the configuration of combing SRa and CRa is two convolutional layers (the kernel sizes are 3$\times$3 and 1$\times$1) with batch normalization. The detailed structure is shown in Fig.\ref{2014}.
+
+
+$\mathbf{Step1:}$ $\mathbf{Domain}$ $\mathbf{projection}$ $\mathbf{and}$ $\mathbf{graph}$ $\mathbf{representation.}$
+
+The purpose of this step is to convert CNN features $\textbf{F}_{e,k} \in \mathbb{R}^{C \times H \times W}$ into graph-structured data $G_{pro,k} \in \mathbb{R}^{N \times C}$, \textcolor{blue}{where} $C$, $H$ and $W$ are the number of channels, height and width of the initial feature, respectively. $N$ is the number of nodes in the graph space. One convolutional layer with 1$\times$1 kernel (out\_channel = $N_{s}$) is used to obtain the graph representation as suggested in \cite{23_Chen_Graph_CVPR}. That is, $G_{pro,k}^{s}=\phi(\textbf{F}_{e,k})= W_{\phi} \times \textbf{F}_{e,k}$ in SRa, where $G_{pro,k}^{s} \in \mathbb{R}^{N_{s} \times HW}$. In addition, high-dimensional channel of feature consume excessive computational resources. Therefore, using another convolutional layer with 1$\times$1 kernel to reduce feature dimension and reshape $\textbf{F}_{e,k}$ to 2D tensor. As $\textbf{F}_{e-,k}^{s}=(\varphi(\textbf{F}_{e,k}))^{\rm T}=(W_{\varphi}^{-} \times \textbf{F}_{e,k})^{\rm T}$, where $\textbf{F}_{e-,k}^{s} \in \mathbb{R}^{HW \times C_{1}}$, and $N_{s}<C_{1}<C$. So far, according to the form of formula (1), we can obtain the spatial graph representation of the feature $\textbf{F}_{e,k}$ \textcolor{blue}{as follows:}
+
+
+\vspace{-0.2cm}
+\begin{equation}
+\setlength\abovedisplayskip{10pt}
+  G^{s} = G_{pro,k}^{s} * \textbf{F}_{e-,k}^{s} = \phi(\textbf{F}_{e,k}) \cdot (\varphi(\textbf{F}_{e,k}))^{\rm T}
+\setlength\belowdisplayskip{10pt}
+\end{equation}
+\textcolor{blue}{where} $G^{s} \in \mathbb{R}^{N_{s} \times C_{1} }$, $G^{s}$ with $N_{s}$ vertexes, and each vertex is represented by the corresponding channel feature of $\mathbb{R}^{C_{1} \times 1}$. Similarly, the channel graph representation is as follows:
+
+\vspace{-0.2cm}
+\begin{equation}
+G^{c} = G_{pro,k}^{c} * \textbf{F}_{e-,k}^{c} = \phi(\textbf{F}_{e,k}^{c}) \cdot (\varphi(\textbf{F}_{e,k}^{c}))^{\rm T}
+\end{equation}
+\textcolor{blue}{where} $G^{c}$ with $N_{c}$ vertexes, and each vertex is represented by the corresponding spatial feature of $\mathbb{R}^{HW \times 1}$.
+
+
+$\mathbf{Step2:}$ $\mathbf{Graph}$ $\mathbf{node}$ $\mathbf{relation}$$\pmb{-}$$\mathbf{aware.}$
+
+Graph convolution is used to learn the graph relation in step1 and to aware the dependencies between nodes. According to the description of formula (4), the relation-aware of graph nodes in SRa is defined as:
+
+\vspace{-0.2cm}
+\begin{equation}
+G_{ra}^{s} = \sigma(L^{s}G^{s}W_{g}^{s})
+\end{equation}
+where $G^{s}$ and $G_{ra}^{s} \in \mathbb{R}^{N_{s} \times C_{1}}$ are the input and output node state of graph convolution. $\sigma(\cdot)$ is the ReLU activation. $W_{g}^{s} \in \mathbb{R}^{C_{1}\times C_{1}}$ is a trainable weight matrix. $L^{s} \in \mathbb{R}^{N_{s} \times N_{s}}$ is the Laplacian matrix, here we choose the symmetric normalized form described in formula (8) to construct it:
+
+\vspace{-0.2cm}
+\begin{equation}
+\widetilde{L^{s}} = I-\widetilde{D}^{-1/2}\widetilde{A}\widetilde{D}^{-1/2}
+\end{equation}
+\textcolor{blue}{where} $I \in \mathbb{R}^{N_{s}\times N_{s}}$. $\widetilde{A} \in \mathbb{R}^{N_{s}\times N_{s}}$. $\widetilde{D} = diag(d_{1},d_{2},\cdots,d_{N_{s}}) \in \mathbb{R}^{N_{s}\times N_{s}}$. $d_{m}=\sum_{n}^{}\widetilde{A}_{mn}, \{m,n\} \in \mathbb{R}^{N_{s}}$. Then, we need to build the adjacency matrix $\widetilde{A}$ to accomplish the above goal.
+
+\begin{figure*}[htbp]
+\centering
+\includegraphics[width=5in]{fig5.eps}
+%\vspace{-0.7cm}
+\caption{The structure of Relation-aware module.}
+\label{2014}
+\end{figure*}
+
+$\widetilde{A}$ indicate the similarity between $N_{s}$ vertexes in $G^{s}$. According to existing experience \cite{22_Cong_RRNet_TGRS,45_Li_Spatial_CVPR}, euclidean distance is used to build $\widetilde{A}$. The similarity between node $m$ and $n$ is represented as follows:
+
+\vspace{-0.2cm}
+\begin{equation}
+\widetilde{A}_{mn} = \rho(G^{s})_{m} \widetilde{\Lambda}(G^{s}) \rho(G^{s})_{n}^{\rm T}
+\end{equation}
+\textcolor{blue}{where} $\rho(\cdot)$ is a fully connected layer with Relu activation. $\widetilde{\Lambda}(G^{s})$ is a diagonal matrix that saves inner product of $G^{s}$:
+
+\vspace{-0.2cm}
+\begin{equation}
+\widetilde{\Lambda}(G^{s}) = diag(conv(G^{s}))
+\end{equation}
+\textcolor{blue}{where} $conv(\cdot)$ is a 1D convolutional with Relu activation, $diag(\cdot)$ expands a vector to a diagonal matrix. Similarly, channel graph node relation-aware is defined as follows.
+
+\vspace{-0.2cm}
+\begin{equation}
+G_{ra}^{c} = \sigma(L^{c}G^{c}W_{g}^{c})
+\end{equation}
+
+
+%\vspace{-0.2cm}
+$\mathbf{Step3:}$ $\mathbf{Graph}$ $\mathbf{re}$$\pmb{-}$$\mathbf{projection.}$
+
+The goal of re-projection is to convert graph structure features into CNN features. To comprehensively represent graph node states, we use skip connections to bridge the initial graph $G$ and updated graph $G_{ra}$. Re-projection is symmetric with the projection process in the step1. For simplicity, we perform the re-projection using the mapping matrix $W_{\phi}$ from step1,
+
+
+\vspace{-0.2cm}
+\begin{equation}
+\textbf{F}_{e+,k}^{s} = W_{\phi}^{\rm T} \times (G^{s}+G_{ra}^{s})
+\end{equation}
+\textcolor{blue}{where} $\textbf{F}_{e+,k}^{s} \in \mathbb{R}^{HW\times C_{1}}$. $W_{\phi}^{\rm T} \in \mathbb{R}^{HW\times N_{s}}$ is the transpose of $W_{\phi}$. Then, we reshape $\textbf{F}_{e+,k}^{s}$ and increase its dimensions to be consistent with $\textbf{F}_{e,k}$. Combining the features before and after relation-aware is denoted as $\textbf{F}_{ra,k}^{s}$,
+
+\vspace{-0.2cm}
+\begin{equation}
+\textbf{F}_{ra,k}^{s} = W_{\phi}^{+} \times \textbf{F}_{e+,k}^{s} + \textbf{F}_{e,k}
+\end{equation}
+\textcolor{blue}{where} $W_{\phi}^{+} \in \mathbb{R}^{C_{1}\times C}$ is the weight matrix of the dimension-raising. The output feature of CRa is denoted as $\textbf{F}_{ra,k}^{c}$.
+
+
+
+%\vspace{-0.7cm}
+\subsection{Loss Function}
+%\vspace{-0.2cm}
+The loss function consists of three components, including the binary change detection loss $L_{c}$, the semantic reasoning loss $L_{s}$ and the deeply-supervised loss $L_{d}$. $L_{c}$ measures the difference between the predicted CD map $\hat{Y}$ and the reference ground truth $Y$. We use a combination of Dice loss and binary cross-entropy (BCE) loss to calculate the $L_{c}$ on each pixel, which is described as follows,
+
+\vspace{-0.2cm}
+\begin{equation}
+  L_{c} = f(\hat{Y},Y)=f_{dice}(\hat{Y},Y)+f_{bce}(\hat{Y},Y)
+\end{equation}
+
+\vspace{-0.2cm}
+\begin{equation}
+    f_{dice}(\hat{Y},Y) = 1 - \sum\limits_{i=1,j=1}^{H_{0}\times W_{0}}\frac{2{\hat{Y}_{ij}Y_{ij}+\varepsilon}}{\hat{Y}_{ij}+Y_{ij}+\varepsilon}
+\end{equation}
+
+\vspace{-0.2cm}
+\begin{equation}
+    f_{bce}(\hat{Y},Y) = \sum\limits_{i=1,j=1}^{H_{0}\times W_{0}}{\frac{{Y_{ij}log\hat{Y}_{ij}+(1-Y_{ij})log(1-\hat{Y}_{ij})}}{H_{0}\times W_{0}}}
+\end{equation}
+\textcolor{blue}{where} $H_{0}$ and $W_{0}$ are the height and width of the input RSIs. $i$ and $j$ are the position indexes of the pixels. $\varepsilon$ is a smoothing constant set to 0.0001. $Y_{ij}=1$ ($Y_{ij}=0$) indicates the changed (unchanged) pixel in the ground truth.
+
+In Chen \textit{et al} \cite{18_Chen_FCCDN_ISPRS}, $L_{s}$ is used to measure the difference between semantic segmentation maps ${S}^{(t_{1})}$ and ${S}^{(t_{2})}$. Inspired by it, we aim to minimize the difference between $\{{S}^{(t_{1})}|R_{u}\}$ and $\{{S}^{(t_{2})}|R_{u}\}$, where $R_{u}$ denotes the set of unchanged pixels in the ground truth. $L_{s}$ is calculated as follows.
+
+\vspace{-0.2cm}
+\begin{equation}
+    L_{s} = f_{R_{u}}({S}^{(t_{1})},{S}^{(t_{2})})=f_{dice|R_{u}}({S}^{(t_{1})},{S}^{(t_{2})})+f_{bce|R_{u}}({S}^{(t_{1})},{S}^{(t_{2})})
+\end{equation}
+
+\vspace{-0.2cm}
+\begin{equation}
+    R_{u} = \{(i,j)|Y_{ij}=0\}
+\end{equation}
+
+$L_{d}$ calculates the difference between the underlying difference encoded features and the ground truth $Y$. We use it to limit the extraction of more useful underlying features. Concretely, the underlying difference feature of dual RSI
+($|\textbf{F}_{e,k}^{(t_{1})}-\textbf{F}_{e,k}^{(t_{2})}|$, $\{ k=1,2 \}$) is input of the DS module, which outputs a difference map $D_{k}$ with the same size as $Y$. Therefore, $L_{d}$ can be formulated as follows.
+
+\vspace{-0.2cm}
+\begin{equation}
+    L_{d} = f(D_{k},Y) = f_{dice}(D_{k},Y)+f_{bce}(D_{k},Y)
+\end{equation}
+Finally, the total loss of RaSRNet is defined as,
+
+\vspace{-0.2cm}
+\begin{equation}
+    L = L_{c}+\alpha L_{s}+\beta L_{d}
+\end{equation}
+where $\alpha$ and $\beta$ are hyperparameters, which we discuss in section IV.
+
+
+%\vspace{-0.4cm}
+\section{Experiments}
+%\vspace{-0.1cm}
+\subsection{Datasets and Implementation Details}
+%\vspace{-0.1cm}
+The simulation experiments are carried on three public datasets, including 1) LEVIR-CD\cite{9_Chen_A_Spatial_RS}, 2) WHU-CD \cite{46_Ji_Fully_TGRS} and 3) SYSU-CD \cite{10_Shi_A_Deeply_TGRS}. They are described as follows.
+
+
+$\mathbf{LEVIR}$$\pmb{-}$$\mathbf{CD.}$ The dataset includes 637 pairs of optical RSIs with the size of 1024$\times$1024. These RSIs with a resolution of 0.5m and record the changes in various buildings. We use the training, validation and testing RSIs provided by the authors and crop them to 256$\times$256.
+
+$\mathbf{WHU}$$\pmb{-}$$\mathbf{CD.}$ The dataset consists of two scenes aerial images with the sizes of 15354$\times$21243 and 15354$\times$11265. The resolution of two period RSIs is 0.3m. We crop the RSIs to 256$\times$256 slices with an overlap on the right and bottom. Then, we randomly divide these slices to 5460, 779, 1516 pairs for training, validation and testing, respectively.
+
+$\mathbf{SYSU}$$\pmb{-}$$\mathbf{CD.}$  The dataset includes 20,000 pairs of optical RSIs with the size of 256$\times$256. These RSIs have a resolution of 0.5m. We use the original RSIs provided by the authors, where 12000, 4000, 4000 pairs of RSIs are used for training, validation and testing, respectively.
+
+We implement the RaSRNet using PyTorch on a PC with an Intel Core i7-8700 3.20-GHz CPU, 16-GB RAM, and an NVIDIA GTX 1070Ti GPU. In the domain projection and graph representation of SRa, we set the number of graph node to be $\frac{1}{4}$ of the number of channels of $\textbf{F}_{e,k}$, and the output channel of the reduced dimensional convolution layer is set to $\frac{1}{2}$ of the number of channels of $\textbf{F}_{e,k}$, i.e., $N_{s}=\frac{1}{2}C_{1}=\frac{1}{4}C$. The same settings are used in CRa. During the training, the encoder is initialized with pretrained ResNet18 on ImageNet, and the remaining parameters are randomly initialized by Kaiming initialization. Besides, the batch size is set to 16, and the optimizer is Adam. The epoch is set to 50 and the initial learning rate (lr) is set to 0.001. The lr remains constant in the first 25 epochs and decays linearly to $e^{-7}$ in the follow 25 epochs. The settings of hyperparameters $\alpha$ and $\beta$ are shown in Table.\ref{1454}. %The proposed model has a real-time inference speed of XX FPS for processing an image with the size of 256$\times$256. \
+We quantitatively evaluate the performance of model using F1-measure (F1),  Kappa Coefficient (KC) and mean intersection-over-union (mIoU). Validation is transacted after each training epoch, and the best model on the validation set evaluates the performance of model on the test set.
+
+%\vspace{-0.3cm}
+\begin{table}[htbp]
+  \renewcommand\arraystretch{0.6}
+  \centering
+  \caption{The setting of hyperparameters $\alpha$ and $\beta$}
+  \vspace{-0.3cm}
+    \begin{tabular}{cccc}
+    \toprule
+          & LEVIR & WHU   & SYSU \\
+    \midrule
+    $\alpha \ | \ \beta$   & $0.2 \ | \ 0.3$   & $0.1 \ | \ 0.2$   & $0.1 \ | \ 0.3$ \\
+    \bottomrule
+    \end{tabular}%
+  \label{1454}%
+\end{table}%
+
+
+\vspace{-0.3cm}
+\subsection{Comparison with State-of-the-art Methods}
+%\vspace{-0.1cm}
+We compare the proposed RaSRNet with five CD methods, including three classification-based methods \cite{26_Daudt_Fully_ICIP} (i.e., FC-EF, FC-Siam-Conc and FC-Siam-Diff) and two metric learning methods (i.e., STANet \cite{9_Chen_A_Spatial_RS} and DSAMNet \cite{10_Shi_A_Deeply_TGRS}). To be fair, we train the five state-of-the-art CD models following the experimental setup set in this study.
+
+$\mathbf{Quantitative}$ $\mathbf{Evaluation.}$ Table.\ref{0330} reports the quantitative comparison results. It shows that RaSRNet outperforms other methods on the three datasets. For example, the F1/KC/mIOU of RaSRNet is 8.74\%, 9.01\% and 6.96\% higher than that of the second-ranked STANet on the LEVIR. The gain gap between RaSRNet and FC-Siam-Conc (second-ranked) is more obvious on WHU, the F1/KC/mIOU is higher than 15.23\%, 15.92\% and 11.64\%. Besides, the F1/KC/mIOU is 1.87\%, 3.22\% and 2.44\% higher than STANet on the SYSU. Note that our baseline model (i.e., SRNet) still has clear advantages compared with the Unet in \cite{26_Daudt_Fully_ICIP}. This illustrates our ``DSED-d" backbone is better than the SSED (FC-EF) and DSED-e (FC-Siam-Conc, FC-Siam-Diff). In addition, RaSRNet uses Ra modules to obtain the global context information, which achieves superior performance than the attention mechanism used in DSAMNet and STANet.
+
+%\vspace{-0.3cm}
+\begin{table}[htbp]
+  \renewcommand\arraystretch{0.7}
+  \scriptsize
+  \tabcolsep=0.1cm
+  \centering
+  \caption{Quantitative Comparative Studies of Difference CD models.}
+  \vspace{-0.2cm}
+    \begin{tabular}{l|ccc|ccc|ccc}
+    \toprule
+    \multirow{2}[4]{*}{Model} & \multicolumn{3}{c|}{LEVIR} & \multicolumn{3}{c|}{WHU} & \multicolumn{3}{c}{SYSU} \\
+\cmidrule{2-10}          & F1 & KC & mIOU & F1 & KC & mIOU & F1 & KC & mIOU \\
+    \midrule
+    FC-EF & .6295 & .6023 & .6995 & .6714 & .6565 & .7367 & .6370  & .4796 & .5827 \\
+    FC-Siam-Conc & .7439 & .7267 & .7781 & .7413 & .7308 & .7838 & .6630  & .5151 & .6036 \\
+    FC-Siam-Diff & .7783 & .7641 & .8040 & .7183 & .7068 & .7685 & .7256 & .6290  & .6944 \\
+    DSAMNet & .7788 & .7649 & .8049 & .5937 & .5776 & .6807 & .7486 & .6635 & .7202 \\
+    STANet & .8096 & .7988 & .8294 & .6900  & .6739 & .7463 & .7645 & .6878 & .7380 \\
+    \midrule
+    SRNet  & .8567 & .8498 & .8677 & .8106  & .8032 & .8333 & .7390 & .6695 & .7271 \\
+    RaSRNet  & \textbf{.8943} & \textbf{.8889} & \textbf{.8990} & \textbf{.8936} & \textbf{.8900} & \textbf{.9002} & \textbf{.7823} & \textbf{.7200} & \textbf{.7624} \\
+    \bottomrule
+    \end{tabular}%
+  \label{0330}%
+\end{table}%
+
+%(\%)
+\vspace{-0.3cm}
+$\mathbf{Qualitative}$ $\mathbf{Evaluation.}$ Fig.\ref{2254} provides the qualitative comparison results. As seen from this
+figure, RaSRNet has the fewest false detection (red and blue) in most cases and renders clean visuals. For paired scenes with various scales of changed objects, such as the 5th and 15th rows, the results show that RaSRNet is able to detect changed objects more comprehensively. For paired scenes with various numbers of changed objects, such as the 1st and 2nd rows, the boundaries of the changed object obtained by RaSRNet are all basically the same as those in ground truth. For paired scenes with large-scale changed objects across the RSI, such as the 8th and 13th rows, our model also achieves relatively fine-grained detection.
+
+The brightness difference between the dual RSIs is more significant in LEVIR dataset. Some of our results are affected, such as the 4th row. This may be because the encoded layers of 4th stage in encoder prefers to the upper half of the building in time $t_{2}$ RIS, and the encoded features of 4th stage directly guide the information recovery in decoder, resulting in misjudgment. However, our model is confident to overcome this natural factor compared to other models, such as the 1st-3rd rows. In addition, scenarios with building shadows are more common in the LEVIR and WHU datasets, such as the 5th, 7th, 9th rows. Our model is able to distinguish between architectural solids and shadows compared to other methods. Proposed model not only demonstrates excellent performance in building CD, but also has positive effects in capturing urban change. This is reflected in the SYSU dataset. For example, sea construction in 11th and 15th rows, road expansion in 13th row, change of vegetation in 14th row. Our model can produce relatively complete CD maps compared with other models.
+
+%\vspace{-0.4cm}
+\begin{figure*}[htbp]
+\centering
+\includegraphics[height=6.5in,width=5in]{fig7.eps}
+%\vspace{-0.3cm}
+\caption{Visual Comparison of RaSRNet and the state-of-the-art models on three datasets. (a) Time $t_{1}$ RSIs. (b) Time $t_{2}$ RSIs. (c) Ground Truth. (d) FC-EF. (e) FC-Siam-Conc. (f) FC-Siam-Diff. (g) DSAMNet. (h) STANet. (i) SRNet (ours). (j) RaSRNet (ours). White represents true positive, black represents true negative, red represents false positive, and blue represents false negative.}
+\label{2254}
+\end{figure*}
+
+%\vspace{-0.1cm}
+\subsection{Ablation Study}
+In this section, several ablation studies are conducted to demonstrate the effectiveness and rationality of our model, including validation on
+different network components and different loss function.
+
+$\mathbf{(1)}$ $\mathbf{Validation}$ $\mathbf{of}$ $\mathbf{different}$ $\mathbf{network}$ $\mathbf{components}$.
+
+
+Different combinations of components, that is SRNet, SRa and CRa in RaSRNet, generate 3 variant networks. Their loss functions are still as shown in formula (20). The first network is SRNet, which has only an encoder-decoder backbone. The second network is called ``SRNet+SRa". It is the architecture that the SRNet equipped with SRa, performs only spatial relation-aware on encoded features $\textbf{F}_{e,k}$ ($ k=1,2,3 $). Therefore, the inputs of the decoder in ``SRNet+SRa" are $\textbf{F}_{ra,k}^{s}$ and $\textbf{F}_{e,4}$. The third network is called ``SRNet+CRa". Similarly, the inputs of the decoder ``SRNet+CRa" are $\textbf{F}_{ra,k}^{c}$ and $\textbf{F}_{e,4}$. RaSRNet can be denoted as ``SRNet+SRa+CRa". We conduct a series of experiments, and the quantitative and qualitative results on testing dataset are provided in Table.\ref{2030} and Fig.\ref{2042}, respectively.
+
+
+%\vspace{-0.4cm}
+From Table.\ref{2030}, it can be found that the addition of different components obviously improves the model performance. SRa is added to SRNet brings the relative gains of F1, KC, mIOU are about 2.24$ \sim $5.76\%, 2.30$ \sim $6.03\% and 1.63$ \sim $4.56\% on three datasets. And then, CRa is independently added to SRNet to obtain relative gains of F1, KC, mIOU are about 1.94$ \sim $3.21\%, 1.60$ \sim $3.33\% and 1.04$ \sim $2.65\%. Further, SRa and CRa are simultaneously introduced into SRNet will obtain the best performance. From Fig.\ref{2042}, it can be seen that SRNet is more disturbed and does not have the ability to learn global information. In contrast, SRa captures more detailed information and obtains more complete changed objects (e.g., the building on the right side of the 2nd row and the bare ground in the 3rd row). CRa also has a more obvious contribution to SRNet, but other interferences are falsely detected as changed objects in the example in the 2nd row. In comparison, SRNet equipped with SRa and CRa (i.e., RaSRNet) can accurately locate the objects and fully suppress the backgrounds. Changed objects output by RaSRNet are endowed with clear boundaries. This proves that the combination of SRa and CRa is beneficial for learning of objects in complex scenes.
+
+
+%\vspace{-0.3cm}
+\begin{table}[htbp]
+  \renewcommand\arraystretch{0.7}
+  \scriptsize
+  \tabcolsep=0.1cm
+  \centering
+  \caption{Ablation Studies About The Components of RaSRNet.}
+  \vspace{-0.2cm}
+    \begin{tabular}{l|ccc|ccc|ccc}
+    \toprule
+    \multirow{2}[4]{*}{Model} & \multicolumn{3}{c|}{LEVIR} & \multicolumn{3}{c|}{WHU} & \multicolumn{3}{c}{SYSU} \\
+\cmidrule{2-10}          & F1 & KC & mIOU & F1 & KC & mIOU & F1 & KC & mIOU \\
+    \midrule
+    SRNet & .8567 & .8498 & .8677 & .8106 & .8032 & .8333 & .7390  & .6695 & .7271 \\
+    SRNet+SRa & .8791 & .8728 & .8859 & .8682 & .8635 & .8789 & .7619 & .6935 & .7434 \\
+    SRNet+CRa & .8888 & .8831 & .8942 & .8363 & .8302 & .8532 & .7584 & .6855 & .7375 \\
+    SRNet+SRa+CRa & \textbf{.8943} & \textbf{.8889} & \textbf{.8990}  & \textbf{.8936} & \textbf{.8900} & \textbf{.9002} & \textbf{.7832} & \textbf{.7200}  & \textbf{.7624} \\
+    \bottomrule
+    \end{tabular}%
+  \label{2030}%
+\end{table}%
+
+
+\vspace{-0.3cm}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=3.4in]{fig6.eps}
+\vspace{-0.8cm}
+\caption{Visual Comparison of the components of RaSRNet. (a) Time $t_{1}$ RSIs. (b) Time $t_{2}$ RSIs. (c) Ground Truth. (d) SRNet. (e) SRNet+SRa. (f) SRNet+CRa. (g) SRNet+SRa+CRa.}
+\label{2042}
+\end{figure}
+
+%\vspace{-0.2cm}
+$\mathbf{(2)}$ $\mathbf{Validation}$ $\mathbf{of}$ $\mathbf{different}$ $\mathbf{loss}$ $\mathbf{components}$.
+
+We organize ablation studies that training RaSRNet with different loss functions. Specifically, 1) Only CD loss. 2) The combination CD loss and semantic reasoning loss, i.e., $L_{c}+\alpha L_{s}$. 3) The combination CD loss and deeply-supervised loss, i.e., $L_{c}+\beta L_{d}$. 4) The total loss is the sum of the three terms, as described by formula (20). The hyperparameters $\alpha$ and $\beta$ are still set as described in Table.\ref{1454}. The quantitative results on the three datasets are shown in Table.\ref{2100}. We can clearly see that the sum-of-three total loss trained RaSRNet performs the best on three datasets. Compared with RaSRNet trained by $L_{c}$, the introduction of $L_{s}$ or $L_{d}$ enable significantly improve the model performance. This effect is more obvious on the SYSU. Therefore, the results in Table.\ref{2100} can firmly prove the rationality of the design of our loss function. It also confirms that imposing semantic constraints on unchanged pixels and constraints on underlying encoded features play an important role in model performance.
+
+
+
+
+%\vspace{-0.3cm}
+\begin{table}[htbp]
+  \renewcommand\arraystretch{0.7}
+  \scriptsize
+  \tabcolsep=0.1cm
+  \centering
+  \caption{Ablation Studies About The Loss Components of RaSRNet.}
+  \vspace{-0.3cm}
+    \begin{tabular}{lll|ccc|ccc|ccc}
+    \toprule
+    \multicolumn{3}{c|}{Components} & \multicolumn{3}{c|}{LEVIR} & \multicolumn{3}{c|}{WHU} & \multicolumn{3}{c}{SYSU} \\
+    \midrule
+    $L_{c}$    & $L_{s}$    & $L_{d}$  & F1 & KC & mIOU & F1 & KC & mIOU & F1 & KC & mIOU \\
+    \midrule
+    \checkmark     &       &       & .8751 & .8686 & .8825 & .8662 & .8614 & .8772 & .7096 & .6328 & .7026 \\
+    \checkmark     & \checkmark     &       & .8877 & .8820 & .8933 & .8861 & .8824 & .8940  & .7619 & .6935 & .7434 \\
+    \checkmark     &       & \checkmark     & .8864 & .8806 & .8922 & .8720  & .8674 & .8820  & .7719 & .7082 & .7540 \\
+    \checkmark     & \checkmark    & \checkmark     & \textbf{.8943} & \textbf{.8889} & \textbf{.8990} & \textbf{.8936} & \textbf{.8900} & \textbf{.9002} & \textbf{.7823} & \textbf{.7200} & \textbf{.7624} \\
+    \bottomrule
+    \end{tabular}%
+  \label{2100}%
+\end{table}%
+
+%\vspace{-0.3cm}
+\subsection{Sensitivity Analysis of Hyperparameters}
+%\vspace{-0.1cm}
+In RaSRNet, the hyperparameters $\alpha$ and $\beta$ represent the contribution of semantic reasoning loss and deeply-supervised loss to the total loss. Considering that the settings of $\alpha$ and $\beta$ will produce influence on the experimental results, we conducted experiments with different parameters to analyze how they affect the performance of RaSRNet. After many attempts, we set the range of $\alpha$ and $\beta$ to [0.1, 0.2, 0.3]. Therefore, we conducted 9 sets of crossover experiments for each dataset. Fig.\ref{9898} shows the performance of RaSRNet under different $\alpha$ and $\beta$. RaSRNet has a tendency to obtain the best performance when $\alpha$=0.2 and $\beta$=0.3 on LEVIR dataset. Only when $\alpha$=0.1 and $\beta$=0.3, the model performance is significantly different from other settings. In the WHU dataset, there are significant fluctuations when different hyperparameters are acted to RaSRNet. The model performs best only when $\alpha$=0.1 and $\beta$=0.2. In the SYSU dataset, RaSRNet shows a significant outperformance over the other cases when $\alpha$=0.1 and $\beta$=0.3. Based on the aforementioned analysis, $\alpha$ and $\beta$ settings for each dataset are summarized in Table.\ref{1454}.
+
+\vspace{-0.3cm}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=3.5in]{fig77.eps}
+\vspace{-0.8cm}
+\caption{Comparison of quantitative results about the performance of RaSRNet under different hyperparameters $\alpha$ and $\beta$.}
+\label{9898}
+\end{figure}
+
+%\vspace{-0.7cm}
+\section{Discussion}
+%\vspace{-0.1cm}
+
+
+\subsection{Ra Module Feature visualization}
+%\vspace{-0.1cm}
+In order to better observe the effect of the Ra module on global information collection, we use the Grad-Cam method to visualize the input and output features of the Ra module, and reshape them as 256$\times$256. Fig.\ref{1713} shows some visualization examples, including low-level single-scale encoded feature maps (i.e., input feature of Ra), SRa-enhanced feature maps and Ra-enhanced feature maps. Since the CRa module works in the channel dimension, we do not provided CRa-enhanced feature maps. From Fig.\ref{1713}, we can see that Ra can extract salient objects in RSI and suppress background information that is irrelevant to changing semantics. For example, the left cases of Fig.\ref{1713}(a) and Fig.\ref{1713}(b), their ground truths both focus on changed building, and the Ra module obviously suppresses the ``road" and ``vehicle" in RSIs. Comparing the SRa feature maps and that of Ra, we find that changed objects extracted by Ra have high internal consistency (such as Fig.\ref{1713}(b) and the left case in Fig.\ref{1713}(c)). Taken together, it is shown that our Ra module can improve the overall recognition of changed objects.
+
+\vspace{-0.3cm}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=3.4in]{fig88.eps}
+\vspace{-0.8cm}
+\caption{Visualization feature maps of the Ra module.}
+\label{1713}
+\end{figure}
+
+
+%\vspace{-0.5cm}
+\subsection{Model intermediate Feature visualization}
+%\vspace{-0.1cm}
+We provide the feature activation maps of RaSRNet in each period using the test sample of LEVIR as an example. They are shown in Fig.\ref{9360}. In order to highlight the changed objects, we mask the ground-truth over the dual optical RSI, as the areas surrounded by the red solid lines of ${\textbf{X}}^{(t_{1})}$ and ${\textbf{X}}^{(t_{2})}$. Siamese encoder generates 4-scales feature maps $\{ {\textbf{F}}_{e,k}^{*} \} _{k=1}^4$ ($* \in \{t_{1},t_{2}\}$). Then the Ra modules act on $\textbf{F}_{e,1}^{*}$, $\textbf{F}_{e,2}^{*}$ and $\textbf{F}_{e,3}^{*}$ respectively to learn rich global context information and generate the refined features $\textbf{F}_{ra,1}^{*}$, $\textbf{F}_{ra,2}^{*}$ and $\textbf{F}_{ra,3}^{*}$. Comparing $\{ {\textbf{F}}_{e,k}^{(t_{1})} \} _{k=1}^3$ and $\{{\textbf{F}}_{ra,k}^{(t_{1})} \} _{k=1}^3$, we can see that our model learns more details of changed objects (buildings) in ${\textbf{X}}^{(t_{2})}$. In addition, the high-level features $\textbf{F}_{e,4}^{*}$ are preserved, thus the semantic concept associated with unchanged is further highlighted in decoder features. The difference feature is generated by $\mid \textbf{F}_{d,1}^{(t_{1})} - \textbf{F}_{d,1}^{(t_{2})} \mid$. Finally, the CD head filters the change-independent noise in difference feature and generates a change probability map.
+
+
+\vspace{-0.3cm}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=3.5in]{fig99.eps}
+%\vspace{-0.9cm}
+\caption{Visualization feature maps of the RaSRNet. ${\textbf{X}}^{(t_{1})}$ and ${\textbf{X}}^{(t_{2})}$ are the input RSIs at time $t_{1}$ and $t_{2}$.}
+\label{9360}
+\end{figure}
+
+%$\{ {\textbf{F}}_{e,k}^{*} \} _{k=1}^4$ denote the encoded feature of four scales, where $* \in \{t_{1},t_{2}\}$. $\{ {\textbf{F}}_{ra,k}^{*} \} _{k=1}^3$ refer to the refined features by relation-aware module. $\{ {\textbf{F}}_{d,k}^{*} \} _{k=1}^3$ represent the decoded feature. The difference feature is generated by $\mid \textbf{F}_{d,1}^{(t_{1})} - \textbf{F}_{d,1}^{(t_{2})} \mid$. Change probability map records the probability of change and no-change for each pixel.
+
+%\vspace{-1cm}
+\subsection{Failure Cases and Future Work}
+
+$\mathbf{(1)}$ $\mathbf{Failure}$ $\mathbf{cases}$.
+Fig.\ref{2033} shows some of these failure cases. For some special and challenging scenarios, proposed method produces less satisfactory CD maps. (1) It is still challenging for scenes where buildings and public ground have low contrast. For example, as shown in the lower right of the 1st row in Fig.\ref{2033}, the public ground and the surrounding buildings are mistaken for a single large building. This is because the roof material of the building shows a similar color to the public ground, making it difficult for model to accurately learn the building boundaries. (2) It is still challenging for scenes where shadows are wrapped in changed areas with complex morphological. For example, as shown in the lower left of the 2nd row in Fig.\ref{2033}, the shadows are embedded between the column building and another regular building and are mistaken for changed areas. (3) It is still challenging to suppress the disturbances of natural growth of vegetation. For example, the 3rd row in Fig.\ref{2033}, bare ground change was not accurately detected due to interference from local morphological and color changes in vegetation.
+
+
+$\mathbf{(2)}$ $\mathbf{Future}$ $\mathbf{work}$.
+Although our method achieves a better performance compared to state-of-the-art CD competitors, failure cases have revealed two areas where future optimizations can be made. First, \textcolor{blue}{an edge prior can be introduced as a reference to further improve the model generalization performance for scenarios where the change areas are very close to the background.} Second, our method performs better on the LEVIR and WHU datasets than on the SYSU dataset, which has richer set of change types and large-scale changed areas. Therefore, detecting large-scale change areas and analyzing change in each type would also be of greater significance.
+
+\vspace{-0.2cm}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=1.8in]{fig10.eps}
+\vspace{-0.2cm}
+\caption{Visual display of the failure cases. (a) Time $t_{1}$ RSIs. (b) Time $t_{2}$ RSIs. (c) Ground Truth. (d) CD maps generated by RaSRNet.}
+\label{2033}
+\end{figure}
+
+\vspace{-0.3cm}
+\section{Conclusion}
+%\vspace{-0.1cm}
+In this article, we focus on performing CD in optical RSIs and propose an end-to-end RaSRNet, which can effectively aware global context information and recover the details of changed objects. The SRNet is developed to extract multi-scale features of ground objects in a propensity, and then integrate and reconstruct multi-scale features to identify objects with different semantics, which can effectively filter the background information and complete the accurate detection of target changed objects. The relation-aware module is proposed to model the semantic relationship between objects in the encoded features from the spatial dimension and to model the correlation between feature channels from the channel dimension, to ensure the integrity recognition of objects in RSIs. Following this way, the proposed RaSRNet enables generate high-quality CD map, which can display changed objects more completely and accurately. Multiple experiments were conducted on three public RSIs CD datasets, and the results firmly demonstrate the effectiveness and superiority of RaSRNet.
+
+%\vspace{-0.4cm}
+\section*{Acknowledgement}
+%\vspace{-0.1cm}
+This work was supported by the National Natural Science Foundation of China under Grant 62173063.
+
+\bibliographystyle{IEEEtran}%IEEEtran 为给定模板格式定义文件名
+\bibliography{IEEEabrv,my_bib}
+
+\vspace{-5cm}
+\begin{IEEEbiography}[{\includegraphics[width=1in,height=1.1in,clip,keepaspectratio]{LiangYi.eps}}]{Yi Liang}
+received the B.S. degrees in measurement and control technology and instrument from the Liaoning Technical University, LiaoNing, China, in 2016, where she is pursuing the Ph.D. degree in electronics and information with Dalian University of Technology, Dalian, China.
+
+Her research interests include remote sensing image change detection and deep learning.
+\end{IEEEbiography}
+
+\vspace{-5cm}
+\begin{IEEEbiography}[{\includegraphics[width=1in,height=1.1in,clip,keepaspectratio]{ZhangChengkun.eps}}]{Chengkun Zhang}
+received the B.S. degrees in automation from the Ocean University of China, Qingdao, China, in 2013, and the Ph.D. degree in control theory and control engineering from Dalian University of Technology, Dalian, China, in 2021.
+
+He is a Lecturer with the  Qinghai University, Xining, China. His research interests include feature extraction and classification of hyperspectral images.
+\end{IEEEbiography}
+
+\vspace{-5cm}
+\begin{IEEEbiography}[{\includegraphics[width=1in,height=1.1in,clip,keepaspectratio]{MinHan.eps}}]{Min Han}
+(M'95-A'03-SM'06) received the B.S. and M.S. degrees from the Department of Electrical Engineering, Dalian University of Technology, Dalian, China, and the M.S. and Ph.D. degrees from Kyushu University, Fukuoka, Japan, in 1982, 1993, 1996, and 1999, respectively. She is currently a Professor with
+the Key Laboratory of Intelligent Control and Optimization for Industrial Equipment of Ministry of Education, Dalian University of Technology. She serves as a deputy director of the Chinese society of instrumentation youth work committee, a committee member of the Chinese Society of Artificial Intelligence, and an Organizing Chair of ISNN2013, ICICIP 2014, ICIST2016.
+
+Her current research interests include remote sensing image interpretation, complex system modeling and forecasting method, time series analysis and forecasting, and neural networks.
+
+\end{IEEEbiography}
+
+\end{document}
+
+

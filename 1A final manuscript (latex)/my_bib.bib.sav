@@ -1,0 +1,677 @@
+
+@article{Liu2019A,
+  author={Liu, Gang and Gousseau, Yann and Tupin, Florence},
+  journal={IEEE Transactions on Geoscience and Remote Sensing},
+  title={\emph{A Contrario} Comparison of Local Descriptors for Change Detection in Very High Spatial Resolution Satellite Images of Urban Areas},
+  year={2019},
+  volume={57},
+  number={6},
+  pages={3904-3918},
+  doi={10.1109/TGRS.2018.2888985}
+}
+
+@article{Hao2020Bidirectional,
+  author= {Hao, Yuzhu and Chen, Zhenjie and Huang, Qiuhao and Li, Feixue and Wang, Beibei and Ma, Lei},
+  title = {Bidirectional Segmented Detection of Land Use Change Based on Object-Level Multivariate Time Series},
+  journal = {Remote Sensing},
+  volume = {12},
+  year = {2020},
+  number = {3},
+  ARTICLE-NUMBER = {478},
+  URL = {https://www.mdpi.com/2072-4292/12/3/478},
+  ISSN = {2072-4292},
+  DOI = {10.3390/rs12030478}
+}
+
+@article{Song2018change,
+  author = {Song, Mi and Zhong, Yanfei and Ma, Ailong},
+  title = {Change Detection Based on Multi-Feature Clustering Using Differential Evolution for Landsat Imagery},
+  journal = {Remote Sensing},
+  volume = {10},
+  year = {2018},
+  number = {10},
+  ARTICLE-NUMBER = {1664},
+  URL = {https://www.mdpi.com/2072-4292/10/10/1664},
+  ISSN = {2072-4292},
+  DOI = {10.3390/rs10101664}
+}
+
+@article{Wang2015Knowledge,
+  author = {Wang, Jianhua and Qin, Qiming and Zhao, Jianghua and Ye, Xin and Feng, Xiao and Qin, Xuebin and Yang, Xiucheng},
+  title = {Knowledge-Based Detection and Assessment of Damaged Roads Using Post-Disaster High-Resolution Remote Sensing Image},
+  journal = {Remote Sensing},
+  volume = {7},
+  year = {2015},
+  number = {4},
+  pages = {4948--4967},
+  ISSN = {2072-4292},
+  URL = {https://www.mdpi.com/2072-4292/7/4/4948},
+  DOI = {10.3390/rs70404948}
+}
+
+@article{Derakhshan2020,
+  author = {Derakhshan, Sahar and Cutter, Susan L. and Wang, Cuizhen},
+  title = {Remote Sensing Derived Indices for Tracking Urban Land Surface Change in Case of Earthquake Recovery},
+  journal = {Remote Sensing},
+  volume = {12},
+  YEAR = {2020},
+  NUMBER = {5},
+  ARTICLE-NUMBER = {895},
+  URL = {https://www.mdpi.com/2072-4292/12/5/895},
+  ISSN = {2072-4292},
+  DOI = {10.3390/rs12050895}
+}
+
+@ARTICLE{Bovolo2007A,
+  author={Bovolo, Francesca and Bruzzone, Lorenzo},
+  journal={IEEE Transactions on Geoscience and Remote Sensing},
+  title={A Theoretical Framework for Unsupervised Change Detection Based on Change Vector Analysis in the Polar Domain},
+  year={2007},
+  volume={45},
+  number={1},
+  pages={218-236},
+  doi={10.1109/TGRS.2006.885408}
+}
+
+@ARTICLE{Saha2019Unsupervised,
+  author={Saha, Sudipan and Bovolo, Francesca and Bruzzone, Lorenzo},
+  journal={IEEE Transactions on Geoscience and Remote Sensing},
+  title={Unsupervised Deep Change Vector Analysis for Multiple-Change Detection in VHR Images},
+  year={2019},
+  volume={57},
+  number={6},
+  pages={3677-3693},
+  doi={10.1109/TGRS.2018.2886643}}
+
+@ARTICLE{Celik2009Unsupervised,
+  author={Celik, Turgay},
+  journal={IEEE Geoscience and Remote Sensing Letters},
+  title={Unsupervised Change Detection in Satellite Images Using Principal Component Analysis and \emph{k}-Means Clustering},
+  year={2009},
+  volume={6},
+  number={4},
+  pages={772-776},
+  doi={10.1109/LGRS.2009.2025059}}
+
+@ARTICLE{Gong2012Change,
+  author={Gong, Maoguo and Zhou, Zhiqiang and Ma, Jingjing},
+  journal={IEEE Transactions on Image Processing},
+  title={Change Detection in Synthetic Aperture Radar Images based on Image Fusion and Fuzzy Clustering},
+  year={2012},
+  volume={21},
+  number={4},
+  pages={2141-2151},
+  doi={10.1109/TIP.2011.2170702}}
+
+@ARTICLE{Nielsen2007The,
+  author={Nielsen, Allan Aasbjerg},
+  journal={IEEE Transactions on Image Processing},
+  title={The Regularized Iteratively Reweighted MAD Method for Change Detection in Multi- and Hyperspectral Data},
+  year={2007},
+  volume={16},
+  number={2},
+  pages={463-478},
+  doi={10.1109/TIP.2006.888195}}
+
+@ARTICLE{Wu2014slow,
+  author={Wu, Chen and Du, Bo and Zhang, Liangpei},
+  journal={IEEE Transactions on Geoscience and Remote Sensing},
+  title={Slow Feature Analysis for Change Detection in Multispectral Imagery},
+  year={2014},
+  volume={52},
+  number={5},
+  pages={2858-2874},
+  doi={10.1109/TGRS.2013.2266673}}
+
+@article{CHEN2014time,
+title = {Time-series processing of large scale remote sensing data with extreme learning machine},
+journal = {Neurocomputing},
+volume = {128},
+pages = {199-206},
+year = {2014},
+issn = {0925-2312},
+doi = {https://doi.org/10.1016/j.neucom.2013.02.051},
+url = {https://www.sciencedirect.com/science/article/pii/S0925231213010084},
+author = {Jiaoyan Chen and Guozhou Zheng and Cong Fang and Ningyu Zhang and Huajun Chen and Zhaohui Wu},
+}
+
+@Article{Lee2016arctic,
+AUTHOR = {Lee, Sanggyun and Im, Jungho and Kim, Jinwoo and Kim, Miae and Shin, Minso and Kim, Hyun-cheol and Quackenbush, Lindi J.},
+TITLE = {Arctic Sea Ice Thickness Estimation from CryoSat-2 Satellite Data Using Machine Learning-Based Lead Detection},
+JOURNAL = {Remote Sensing},
+VOLUME = {8},
+YEAR = {2016},
+NUMBER = {9},
+ARTICLE-NUMBER = {698},
+URL = {https://www.mdpi.com/2072-4292/8/9/698},
+ISSN = {2072-4292},
+DOI = {10.3390/rs8090698}
+}
+
+@article{LI2021learning,
+title = {Learning deep semantic segmentation network under multiple weakly-supervised constraints for cross-domain remote sensing image semantic segmentation},
+journal = {ISPRS Journal of Photogrammetry and Remote Sensing},
+volume = {175},
+pages = {20-33},
+year = {2021},
+issn = {0924-2716},
+doi = {https://doi.org/10.1016/j.isprsjprs.2021.02.009},
+url = {https://www.sciencedirect.com/science/article/pii/S0924271621000423},
+author = {Yansheng Li and Te Shi and Yongjun Zhang and Wei Chen and Zhibin Wang and Hao Li}}
+
+@ARTICLE{Roy2021attention,
+  author={Roy, Swalpa Kumar and Manna, Suvojit and Song, Tiecheng and Bruzzone, Lorenzo},
+  journal={IEEE Transactions on Geoscience and Remote Sensing},
+  title={Attention-Based Adaptive Spectral¨CSpatial Kernel ResNet for Hyperspectral Image Classification},
+  year={2021},
+  volume={59},
+  number={9},
+  pages={7831-7843},
+  doi={10.1109/TGRS.2020.3043267}}
+
+@ARTICLE{zhang2019CAD,
+  author={Zhang, Gongjie and Lu, Shijian and Zhang, Wei},
+  journal={IEEE Transactions on Geoscience and Remote Sensing},
+  title={CAD-Net: A Context-Aware Detection Network for Objects in Remote Sensing Imagery},
+  year={2019},
+  volume={57},
+  number={12},
+  pages={10015-10024},
+  doi={10.1109/TGRS.2019.2930982}}
+
+@ARTICLE{shi2021A,
+  author={Shi, Qian and Liu, Mengxi and Li, Shengchen and Liu, Xiaoping and Wang, Fei and Zhang, Liangpei},
+  journal={IEEE Transactions on Geoscience and Remote Sensing},
+  title={A Deeply Supervised Attention Metric-Based Network and an Open Aerial Image Dataset for Remote Sensing Change Detection},
+  year={2021},
+  volume={},
+  number={},
+  pages={1-16},
+  doi={10.1109/TGRS.2021.3085870}}
+
+@Article{shi2020change,
+  AUTHOR = {Shi, Wenzhong and Zhang, Min and Zhang, Rui and Chen, Shanxiong and Zhan, Zhao},
+  TITLE = {Change Detection Based on Artificial Intelligence : State-of-the-Art and Challenges},
+  JOURNAL = {Remote Sensing},
+  VOLUME = {12},
+  YEAR = {2020},
+  NUMBER = {10},
+  ARTICLE-NUMBER = {1688},
+  URL = {https://www.mdpi.com/2072-4292/12/10/1688},
+  ISSN = {2072-4292}
+}
+
+
+@InProceedings{2128,
+author={Varghese, Ashley
+and Gubbi, Jayavardhana
+and Ramaswamy, Akshaya
+and Balamuralidhar, P.},
+editor="Leal-Taix{\'e}, Laura
+and Roth, Stefan",
+title={ChangeNet: A Deep Learning Architecture for Visual Change Detection},
+booktitle={Computer Vision -- ECCV 2018 Workshops},
+year={2019},
+publisher={Springer International Publishing},
+address={Cham},
+pages={129-145},
+isbn={978-3-030-11012-3}
+}
+
+@article{1615,
+title = {Change detection using deep learning approach with object-based image analysis},
+journal = {Remote Sensing of Environment},
+volume = {256},
+pages = {112308},
+year = {2021},
+issn = {0034-4257},
+doi = {https://doi.org/10.1016/j.rse.2021.112308},
+url = {https://www.sciencedirect.com/science/article/pii/S0034425721000262},
+author = {Tao Liu and Lexie Yang and Dalton Lunga}}
+
+@ARTICLE{1525,
+  author={Yang, Meijuan and Jiao, Licheng and Liu, Fang and Hou, Biao and Yang, Shuyuan},
+  journal={IEEE Transactions on Geoscience and Remote Sensing},
+  title={Transferred Deep Learning-Based Change Detection in Remote Sensing Images},
+  year={2019},
+  volume={57},
+  number={9},
+  pages={6960-6973},
+  doi={10.1109/TGRS.2019.2909781}}
+
+@ARTICLE{1635,
+  author={Ji, Shunping and Wei, Shiqing and Lu, Meng},
+  journal={IEEE Transactions on Geoscience and Remote Sensing},
+  title={Fully Convolutional Networks for Multisource Building Extraction From an Open Aerial and Satellite Imagery Data Set},
+  year={2019},
+  volume={57},
+  number={1},
+  pages={574-586},
+  doi={10.1109/TGRS.2018.2858817}}
+
+@ARTICLE{1608,
+  author={Lei, Yinjie and Peng, Duo and Zhang, Pingping and Ke, Qiuhong and Li, Haifeng},
+  journal={IEEE Transactions on Image Processing},
+  title={Hierarchical Paired Channel Fusion Network for Street Scene Change Detection},
+  year={2021},
+  volume={30},
+  number={},
+  pages={55-67},
+  doi={10.1109/TIP.2020.3031173}}
+
+@article{1625,
+title = {A deeply supervised image fusion network for change detection in high resolution bi-temporal remote sensing images},
+journal = {ISPRS Journal of Photogrammetry and Remote Sensing},
+volume = {166},
+pages = {183-200},
+year = {2020},
+issn = {0924-2716},
+doi = {https://doi.org/10.1016/j.isprsjprs.2020.06.003},
+url = {https://www.sciencedirect.com/science/article/pii/S0924271620301532},
+author = {Chenxiao Zhang and Peng Yue and Deodato Tapete and Liangcun Jiang and Boyi Shangguan and Li Huang and Guangchao Liu}}
+
+
+@article{1612,
+title = {High-resolution triplet network with dynamic multiscale feature for change detection on satellite images},
+journal = {ISPRS Journal of Photogrammetry and Remote Sensing},
+volume = {177},
+pages = {103-115},
+year = {2021},
+issn = {0924-2716},
+doi = {https://doi.org/10.1016/j.isprsjprs.2021.05.001},
+url = {https://www.sciencedirect.com/science/article/pii/S0924271621001246},
+author = {Xuan Hou and Yunpeng Bai and Ying Li and Changjing Shang and Qiang Shen}}
+
+@article{841,
+title = {Object-level change detection with a dual correlation attention-guided detector},
+journal = {ISPRS Journal of Photogrammetry and Remote Sensing},
+volume = {177},
+pages = {147-160},
+year = {2021},
+issn = {0924-2716},
+doi = {https://doi.org/10.1016/j.isprsjprs.2021.05.002},
+url = {https://www.sciencedirect.com/science/article/pii/S0924271621001271},
+author = {Lin Zhang and Xiangyun Hu and Mi Zhang and Zhen Shu and Hao Zhou},
+}
+
+@ARTICLE{839,
+  author={Zhang, Sheng and Liu, Yuliang and Jin, Lianwen and Wei, Zhongrong and Shen, Chunhua},
+  journal={IEEE Transactions on Multimedia},
+  title={OPMP: An Omnidirectional Pyramid Mask Proposal Network for Arbitrary-Shape Scene Text Detection},
+  year={2021},
+  volume={23},
+  number={},
+  pages={454-467},
+  doi={10.1109/TMM.2020.2978630}}
+
+@INPROCEEDINGS{842,
+  author={Lai, Wei-Sheng and Huang, Jia-Bin and Ahuja, Narendra and Yang, Ming-Hsuan},
+  booktitle={2017 IEEE Conference on Computer Vision and Pattern Recognition (CVPR)},
+  title={Deep Laplacian Pyramid Networks for Fast and Accurate Super-Resolution},
+  year={2017},
+  volume={},
+  number={},
+  pages={5835-5843},
+  doi={10.1109/CVPR.2017.618}}
+
+@ARTICLE{844,
+  author={Ji, Shunping and Wei, Shiqing and Lu, Meng},
+  journal={IEEE Transactions on Geoscience and Remote Sensing},
+  title={Fully Convolutional Networks for Multisource Building Extraction From an Open Aerial and Satellite Imagery Data Set},
+  year={2019},
+  volume={57},
+  number={1},
+  pages={574-586},
+  doi={10.1109/TGRS.2018.2858817}}
+
+@Article{848,
+AUTHOR = {Jiang, Huiwei and Hu, Xiangyun and Li, Kun and Zhang, Jinming and Gong, Jinqi and Zhang, Mi},
+TITLE = {PGA-SiamNet: Pyramid Feature-Based Attention-Guided Siamese Network for Remote Sensing Orthoimagery Building Change Detection},
+JOURNAL = {Remote Sensing},
+VOLUME = {12},
+YEAR = {2020},
+NUMBER = {3},
+ARTICLE-NUMBER = {484},
+URL = {https://www.mdpi.com/2072-4292/12/3/484},
+ISSN = {2072-4292},DOI = {10.3390/rs12030484}
+}
+
+@ARTICLE{917,
+  author={Yang, Meijuan and Jiao, Licheng and Liu, Fang and Hou, Biao and Yang, Shuyuan and Jian, Meng},
+  journal={IEEE Transactions on Neural Networks and Learning Systems},
+  title={DPFL-Nets: Deep Pyramid Feature Learning Networks for Multiscale Change Detection},
+  year={2021},
+  volume={},
+  number={},
+  pages={1-15},
+  doi={10.1109/TNNLS.2021.3079627}}
+
+@ARTICLE{1034,
+  author={Shahbaz, Ajmal and Jo, Kang-Hyun},
+  journal={IEEE Transactions on Industrial Informatics},
+  title={Deep Atrous Spatial Features-Based Supervised Foreground Detection Algorithm for Industrial Surveillance Systems},
+  year={2021},
+  volume={17},
+  number={7},
+  pages={4818-4826},
+  doi={10.1109/TII.2020.3017078}}
+
+@ARTICLE{1037,
+  author={Tang, Xu and Zhang, Huayu and Mou, Lichao and Liu, Fang and Zhang, Xiangrong and Zhu, Xiao Xiang and Jiao, Licheng},
+  journal={IEEE Transactions on Geoscience and Remote Sensing},
+  title={An Unsupervised Remote Sensing Change Detection Method Based on Multiscale Graph Convolutional Network and Metric Learning},
+  year={2021},
+  volume={},
+  number={},
+  pages={1-15},
+  doi={10.1109/TGRS.2021.3106381}}
+
+@INPROCEEDINGS{1056,
+  author={Lin, Tsung-Yi and Doll¨¢r, Piotr and Girshick, Ross and He, Kaiming and Hariharan, Bharath and Belongie, Serge},
+  booktitle={2017 IEEE Conference on Computer Vision and Pattern Recognition (CVPR)},
+  title={Feature Pyramid Networks for Object Detection},
+  year={2017},
+  volume={},
+  number={},
+  pages={936-944},
+  doi={10.1109/CVPR.2017.106}}
+
+@article{1050,
+title = {PBNet: Part-based convolutional neural network for complex composite object detection in remote sensing imagery},
+journal = {ISPRS Journal of Photogrammetry and Remote Sensing},
+volume = {173},
+pages = {50-65},
+year = {2021},
+issn = {0924-2716},
+doi = {https://doi.org/10.1016/j.isprsjprs.2020.12.015},
+url = {https://www.sciencedirect.com/science/article/pii/S0924271620303555},
+author = {Xian Sun and Peijin Wang and Cheng Wang and Yingfei Liu and Kun Fu}}
+
+@ARTICLE{1130,
+  author={Chen, Liang-Chieh and Papandreou, George and Kokkinos, Iasonas and Murphy, Kevin and Yuille, Alan L.},
+  journal={IEEE Transactions on Pattern Analysis and Machine Intelligence},
+  title={DeepLab: Semantic Image Segmentation with Deep Convolutional Nets, Atrous Convolution, and Fully Connected CRFs},
+  year={2018},
+  volume={40},
+  number={4},
+  pages={834-848},
+  doi={10.1109/TPAMI.2017.2699184}}
+
+@ARTICLE{1128,
+  author={Shahbaz, Ajmal and Jo, Kang-Hyun},
+  journal={IEEE Transactions on Industrial Informatics},
+  title={Deep Atrous Spatial Features-Based Supervised Foreground Detection Algorithm for Industrial Surveillance Systems},
+  year={2021},
+  volume={17},
+  number={7},
+  pages={4818-4826},
+  doi={10.1109/TII.2020.3017078}}
+
+@Article{1415,
+AUTHOR = {Yao, Xudong and Guo, Qing and Li, An},
+TITLE = {Light-Weight Cloud Detection Network for Optical Remote Sensing Images with Attention-Based DeeplabV3+ Architecture},
+JOURNAL = {Remote Sensing},
+VOLUME = {13},
+YEAR = {2021},
+NUMBER = {18},
+ARTICLE-NUMBER = {3617},
+URL = {https://www.mdpi.com/2072-4292/13/18/3617},
+ISSN = {2072-4292}}
+
+@misc{2011,
+  title={An Attentive Survey of Attention Models},
+  author={Sneha Chaudhari and Varun Mithal and Gungor Polatkan and Rohan Ramanath},
+  year={2021},
+  eprint={1904.02874},
+  archivePrefix={arXiv},
+  primaryClass={cs.LG}
+}
+
+@Article{2144,
+AUTHOR = {Yan, Li and Yang, Jianbing and Zhang, Yi and Zhao, Anqi and Li, Xi},
+TITLE = {Radiometric Normalization for Cross-Sensor Optical Gaofen Images with Change Detection and Chi-Square Test},
+JOURNAL = {Remote Sensing},
+VOLUME = {13},
+YEAR = {2021},
+NUMBER = {16},
+ARTICLE-NUMBER = {3125},
+URL = {https://www.mdpi.com/2072-4292/13/16/3125},
+ISSN = {2072-4292},
+DOI = {10.3390/rs13163125}
+}
+
+@ARTICLE{2137,
+  author={Zhang, Wuxia and Lu, Xiaoqiang and Li, Xuelong},
+  journal={IEEE Transactions on Geoscience and Remote Sensing},
+  title={A Coarse-to-Fine Semi-Supervised Change Detection for Multispectral Images},
+  year={2018},
+  volume={56},
+  number={6},
+  pages={3587-3599},
+  doi={10.1109/TGRS.2018.2802785}}
+
+@InProceedings{1556,
+author={He, Kaiming and Zhang, Xiangyu and Ren, Shaoqing and Sun, Jian},
+title={Identity Mappings in Deep Residual Networks},
+booktitle={Computer Vision -- ECCV 2016},
+year={2016},
+pages={630--645}}
+
+@INPROCEEDINGS{1540,
+  author={Huang, Gao and Liu, Zhuang and Van Der Maaten, Laurens and Weinberger, Kilian Q.},
+  booktitle={2017 IEEE Conference on Computer Vision and Pattern Recognition (CVPR)},
+  title={Densely Connected Convolutional Networks},
+  year={2017},
+  volume={},
+  number={},
+  pages={2261-2269},
+  doi={10.1109/CVPR.2017.243}}
+
+@INPROCEEDINGS{2100,
+  author={Xie, Saining and Girshick, Ross and Doll¨¢r, Piotr and Tu, Zhuowen and He, Kaiming},
+  booktitle={2017 IEEE Conference on Computer Vision and Pattern Recognition (CVPR)},
+  title={Aggregated Residual Transformations for Deep Neural Networks},
+  year={2017},
+  volume={},
+  number={},
+  pages={5987-5995},
+  doi={10.1109/CVPR.2017.634}}
+
+@misc{1548,
+  title={Wide Residual Networks},
+  author={Sergey Zagoruyko and Nikos Komodakis},
+  year={2017},
+  eprint={1605.07146},
+  archivePrefix={arXiv},
+  primaryClass={cs.CV}
+}
+
+@ARTICLE{2108,
+  author={Dimou, Anastasios and Ataloglou, Dimitrios and Dimitropoulos, Kosmas and Alvarez, Federico and Daras, Petros},
+  journal={IEEE Transactions on Circuits and Systems for Video Technology},
+  title={LDS-Inspired Residual Networks},
+  year={2019},
+  volume={29},
+  number={8},
+  pages={2363-2375},
+  doi={10.1109/TCSVT.2018.2869680}}
+
+@ARTICLE{837,
+  author={Galassi, Andrea and Lippi, Marco and Torroni, Paolo},
+  journal={IEEE Transactions on Neural Networks and Learning Systems},
+  title={Attention in Natural Language Processing},
+  year={2021},
+  volume={32},
+  number={10},
+  pages={4291-4308},
+  doi={10.1109/TNNLS.2020.3019893}}
+
+@ARTICLE{843,
+  author={Cho, Kyunghyun and Courville, Aaron and Bengio, Yoshua},
+  journal={IEEE Transactions on Multimedia},
+  title={Describing Multimedia Content Using Attention-Based Encoder-Decoder Networks},
+  year={2015},
+  volume={17},
+  number={11},
+  pages={1875-1886},
+  doi={10.1109/TMM.2015.2477044}}
+
+@ARTICLE{849,
+  author={Dairi, Abdelkader and Harrou, Fouzi and Khadraoui, Sofiane and Sun, Ying},
+  journal={IEEE Transactions on Instrumentation and Measurement},
+  title={Integrated Multiple Directed Attention-Based Deep Learning for Improved Air Pollution Forecasting},
+  year={2021},
+  volume={70},
+  number={},
+  pages={1-15},
+  doi={10.1109/TIM.2021.3091511}}
+
+@inproceedings{1637,
+author = {Vaswani, Ashish and Shazeer, Noam and Parmar, Niki and Uszkoreit, Jakob and Jones, Llion and Gomez, Aidan N. and Kaiser, \L{}ukasz and Polosukhin, Illia},
+title = {Attention is All You Need},
+year = {2017},
+isbn = {9781510860964},
+publisher = {Curran Associates Inc.},
+address = {Red Hook, NY, USA},
+booktitle = {Proceedings of the 31st International Conference on Neural Information Processing Systems},
+pages = {6000¨C6010},
+numpages = {11},
+location = {Long Beach, California, USA},
+series = {NIPS'17}
+}
+
+@misc{1040,
+  title={CBAM: Convolutional Block Attention Module},
+  author={Sanghyun Woo and Jongchan Park and Joon-Young Lee and In So Kweon},
+  year={2018},
+  eprint={1807.06521},
+  archivePrefix={arXiv},
+  primaryClass={cs.CV}
+}
+
+@Article{1113,
+AUTHOR = {Diakogiannis, Foivos I. and Waldner, Fran\c{c}ois and Caccetta, Peter},
+TITLE = {Looking for Change? Roll the Dice and Demand Attention},
+JOURNAL = {Remote Sensing},
+VOLUME = {13},
+YEAR = {2021},
+NUMBER = {18},
+ARTICLE-NUMBER = {3707},
+URL = {https://www.mdpi.com/2072-4292/13/18/3707},
+ISSN = {2072-4292},
+DOI = {10.3390/rs13183707}
+}
+
+@ARTICLE{1530,
+  author={Ji, Yuzhu and Zhang, Haijun and Jie, Zequn and Ma, Lin and Jonathan Wu, Q. M.},
+  journal={IEEE Transactions on Neural Networks and Learning Systems},
+  title={CASNet: A Cross-Attention Siamese Network for Video Salient Object Detection},
+  year={2021},
+  volume={32},
+  number={6},
+  pages={2676-2690},
+  doi={10.1109/TNNLS.2020.3007534}}
+
+@ARTICLE{1412,
+  author={Li, Ya-Li and Wang, Shengjin},
+  journal={IEEE Transactions on Image Processing},
+  title={HAR-Net: Joint Learning of Hybrid Attention for Single-Stage Object Detection},
+  year={2020},
+  volume={29},
+  number={},
+  pages={3092-3103},
+  doi={10.1109/TIP.2019.2957850}}
+
+@ARTICLE{1332,
+  author={Gao, Shang-Hua and Cheng, Ming-Ming and Zhao, Kai and Zhang, Xin-Yu and Yang, Ming-Hsuan and Torr, Philip},
+  journal={IEEE Transactions on Pattern Analysis and Machine Intelligence},
+  title={Res2Net: A New Multi-Scale Backbone Architecture},
+  year={2021},
+  volume={43},
+  number={2},
+  pages={652-662},
+  doi={10.1109/TPAMI.2019.2938758}}
+
+@ARTICLE{2158,
+  author={Xu, Han and Ma, Jiayi and Zhang, Xiao-Ping},
+  journal={IEEE Transactions on Image Processing},
+  title={MEF-GAN: Multi-Exposure Image Fusion via Generative Adversarial Networks},
+  year={2020},
+  volume={29},
+  number={},
+  pages={7203-7216},
+  doi={10.1109/TIP.2020.2999855}}
+
+@ARTICLE{1225,
+  author={Lin, Tsung-Yi and Goyal, Priya and Girshick, Ross and He, Kaiming and Doll¨¢r, Piotr},
+  journal={IEEE Transactions on Pattern Analysis and Machine Intelligence},
+  title={Focal Loss for Dense Object Detection},
+  year={2020},
+  volume={42},
+  number={2},
+  pages={318-327},
+  doi={10.1109/TPAMI.2018.2858826}}
+
+@ARTICLE{1402,
+  author={Zhang, Jinsong and Xing, Mengdao and Sun, Guang-Cai and Chen, Jianlai and Li, Mengya and Hu, Yihua and Bao, Zheng},
+  journal={IEEE Transactions on Geoscience and Remote Sensing},
+  title={Water Body Detection in High-Resolution SAR Images With Cascaded Fully-Convolutional Network and Variable Focal Loss},
+  year={2021},
+  volume={59},
+  number={1},
+  pages={316-332},
+  doi={10.1109/TGRS.2020.2999405}}
+
+@Article{1700,
+AUTHOR = {Chen, Hao and Shi, Zhenwei},
+TITLE = {A Spatial-Temporal Attention-Based Method and a New Dataset for Remote Sensing Image Change Detection},
+JOURNAL = {Remote Sensing},
+VOLUME = {12},
+YEAR = {2020},
+NUMBER = {10},
+ARTICLE-NUMBER = {1662},
+URL = {https://www.mdpi.com/2072-4292/12/10/1662},
+ISSN = {2072-4292},
+DOI = {10.3390/rs12101662}}
+
+@ARTICLE{1704,
+  author={Benedek, Csaba and Sziranyi, Tam¨¢s},
+  journal={IEEE Transactions on Geoscience and Remote Sensing},
+  title={Change Detection in Optical Aerial Images by a Multilayer Conditional Mixed Markov Model},
+  year={2009},
+  volume={47},
+  number={10},
+  pages={3416-3430},
+  doi={10.1109/TGRS.2009.2022633}}
+
+@ARTICLE{9467,
+  author={Shi, Qian and Liu, Mengxi and Li, Shengchen and Liu, Xiaoping and Wang, Fei and Zhang, Liangpei},
+  journal={IEEE Transactions on Geoscience and Remote Sensing},
+  title={A Deeply Supervised Attention Metric-Based Network and an Open Aerial Image Dataset for Remote Sensing Change Detection},
+  year={2022},
+  volume={60},
+  number={},
+  pages={1-16},
+  doi={10.1109/TGRS.2021.3085870}}
+
+@article{1953,
+title = {Multitask learning for large-scale semantic change detection},
+journal = {Computer Vision and Image Understanding},
+volume = {187},
+pages = {102783},
+year = {2019},
+issn = {1077-3142},
+doi = {https://doi.org/10.1016/j.cviu.2019.07.003},
+url = {https://www.sciencedirect.com/science/article/pii/S1077314219300992},
+author = {Rodrigo {Caye Daudt} and Bertrand {Le Saux} and Alexandre Boulch and Yann Gousseau},
+}
+
+@INPROCEEDINGS{0001,
+  author={Caye Daudt, Rodrigo and Le Saux, Bertr and Boulch, Alexandre},
+  booktitle={2018 25th IEEE International Conference on Image Processing (ICIP)},
+  title={Fully Convolutional Siamese Networks for Change Detection},
+  year={2018},
+  volume={},
+  number={},
+  pages={4063-4067},
+  doi={10.1109/ICIP.2018.8451652}}
